@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>主贴</title>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@2.3.8/dist/css/AdminLTE.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-table@1.11.1/dist/bootstrap-table.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@2.3.8/dist/css/skins/_all-skins.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@2.3.8/dist/css/AdminLTE.min.css">
+<link rel="stylesheet" href="/css/main.css">
+
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div id="app" v-cloak class="wrapper">
+  <main-header></main-header>
+  <main-sidebar></main-sidebar>
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <content-header title="帖子管理"></content-header>
+    <!-- Main content -->
+    <section class="content">
+	<div v-show="showList">
+		<div class="box">
+			<div class="box-header with-border">
+              <h3 class="box-title">列表</h3>
+            </div><!-- /.box-header -->
+            <div class="box-body">
+				<div class="form-group">
+					<div class="col-sm-2">
+						<input type="text" class="form-control" v-model="q.title" @keyup.enter="query" placeholder="话题">
+					</div>
+					<a class="btn btn-default" @click="query">查询</a>
+					<a class="btn btn-info" @click="detail">详情</a>
+					<a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+				</div>
+			    <table id="table"></table>
+			</div>
+		</div>	
+    </div>
+    
+    <div v-show="!showList">
+    	<div class="box">
+			<div class="box-header with-border">
+              <h3 class="box-title">{{title}}</h3>
+            </div><!-- /.box-header -->
+            <div class="box-body">
+				<form class="form-horizontal">
+					<div class="form-group">
+					   	<div class="col-sm-2 control-label">图片</div>
+					   	<div class="col-sm-7">
+						    <!-- The container for the uploaded files -->
+						    <div id="files" class="files">
+						    	<div v-for="(picUrl, key, index) in topic.picUrls" class="col-sm-3 img-wrap">
+						    		<img alt="" width="100%" :src="picUrl">
+						    	</div>
+						    </div>
+					    </div>
+					</div>
+					
+					<div class="form-group">
+					   	<div class="col-sm-2 control-label">标题</div>
+					   	
+					   	<div class="col-sm-7">
+					   	<div class="checkbox">
+					      {{topic.title}}
+					    </div>
+					    </div>
+					</div>
+					
+					<div class="form-group">
+					   	<div class="col-sm-2 control-label">发布者</div>
+					   	
+					   	<div class="col-sm-7">
+					   	<div class="checkbox">
+					      {{topic.member.nickname}}
+					    </div>
+					    </div>
+					</div>
+					
+					<div class="form-group">
+					   	<div class="col-sm-2 control-label">描述</div>
+					   	
+					   	<div class="col-sm-7">
+					   	<div class="checkbox">
+					      {{topic.content}}
+					      
+					    </div>
+					    </div>
+					</div>
+					
+					<div class="form-group">
+						<div class="col-sm-2 control-label"></div> 
+						<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+					</div>
+				</form>
+			</div>
+		</div>
+    </div>
+    
+	</section>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/jquery@2.2.4/dist/jquery.min.js"></script>
+<script src="/plugins/layer/layer.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.2.6/dist/vue.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-table@1.11.1/dist/bootstrap-table.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-table@1.11.1/dist/locale/bootstrap-table-zh-CN.min.js"></script>
+
+<script src="/js/app.js"></script>
+<script src="/js/admin/components.js"></script>
+<script src="/js/admin/common.js"></script>
+<script src="/js/admin/bbs/topic.js"></script>
+</body>
+</html>

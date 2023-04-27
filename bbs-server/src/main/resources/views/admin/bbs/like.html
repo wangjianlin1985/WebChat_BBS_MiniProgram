@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>点赞</title>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@2.3.8/dist/css/AdminLTE.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-table@1.11.1/dist/bootstrap-table.min.css">
+<link rel="stylesheet" href="../../css/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@2.3.8/dist/css/skins/_all-skins.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@2.3.8/dist/css/AdminLTE.min.css">
+
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div id="app" v-cloak class="wrapper">
+  <main-header></main-header>
+  <main-sidebar></main-sidebar>
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <content-header title="广告管理"></content-header>
+    <!-- Main content -->
+    <section class="content">
+	<div v-show="showList">
+		<div class="box">
+			<div class="box-header with-border">
+              <h3 class="box-title">列表</h3>
+            </div><!-- /.box-header -->
+            <div class="box-body">
+				<div class="form-group">
+					<a v-if="hasPermission('like:save')" class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+					<a v-if="hasPermission('like:update')" class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+					<a v-if="hasPermission('like:delete')" class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+				</div>
+			    <table id="table"></table>
+			</div>
+		</div>	
+    </div>
+    
+    <div v-show="!showList">
+		<div class="box">
+			<div class="box-header with-border">
+              <h3 class="box-title">{{title}}</h3>
+            </div><!-- /.box-header -->
+            <div class="box-body">
+		<form class="form-horizontal">
+											<div class="form-group">
+			   	<div class="col-sm-2 control-label">会员id</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="like.memberId" placeholder="会员id"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<div class="col-sm-2 control-label">帖子id</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="like.topicId" placeholder="帖子id"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<div class="col-sm-2 control-label">创建时间</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="like.createTime" placeholder="创建时间"/>
+			    </div>
+			</div>
+							<div class="form-group">
+				<div class="col-sm-2 control-label"></div> 
+				<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+				&nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+			</div>
+		</form>
+		</div>
+	</div>
+	</div>
+	</section>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/jquery@2.2.4/dist/jquery.min.js"></script>
+<script src="/plugins/layer/layer.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.2.6/dist/vue.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-table@1.11.1/dist/bootstrap-table.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-table@1.11.1/dist/locale/bootstrap-table-zh-CN.min.js"></script>
+
+<script src="../../js/common.js"></script>
+<script src="../../js/components.js"></script>
+<script src="../../libs/app.js"></script>
+<script src="../../js/modules/generator/like.js"></script>
+</body>
+</html>

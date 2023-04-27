@@ -1,0 +1,8 @@
+/* pages/comment/index.wxss */
+page{
+  height: 100%
+}
+
+.container{
+  height: 100%;
+}

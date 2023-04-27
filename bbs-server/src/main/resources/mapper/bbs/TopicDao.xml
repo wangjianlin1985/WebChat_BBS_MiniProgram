@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wfuhui.modules.bbs.dao.TopicDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.wfuhui.modules.bbs.entity.TopicEntity" id="topicMap">
+        <result property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="memberId" column="member_id"/>
+        <result property="categoryId" column="category_id"/>
+        <result property="status" column="status"/>
+        <result property="videoUrl" column="video_url"/>
+        <result property="likeNumber" column="like_number"/>
+        <result property="replyNumber" column="reply_number"/>
+        <result property="createTime" column="create_time"/>
+        <result property="anonymous" column="anonymous"/>
+        <association property="member" javaType="com.wfuhui.modules.member.entity.MemberEntity">
+        	<result property="id" column="user_id"/>
+        	<result property="nickname" column="nickname"/>
+        	<result property="avatarUrl" column="avatar_url"/>
+        </association>
+        <association property="category" javaType="com.wfuhui.modules.bbs.entity.CategoryEntity">
+        	<result property="categoryName" column="category_name"/>
+        </association>
+        <collection property="picUrls" column="id" select="com.wfuhui.modules.bbs.dao.TopicPicDao.selectPicByTopicId">
+        </collection>
+    </resultMap>
+
+	<select id="queryObject" resultMap="topicMap">
+		select t.*,u.id as user_id, u.nickname, u.avatar_url, 
+		(select count(1) from bbs_like where topic_id = t.id) like_number, 
+		(select count(1) from bbs_reply where topic_id = t.id) reply_number from bbs_topic t 
+		left join base_member u on t.member_id = u.id where t.id = #{value}
+	</select>
+
+	<select id="queryList" resultMap="topicMap">
+		select t.*,u.id as user_id, u.nickname, u.avatar_url, c.category_name, 
+		(select count(1) from bbs_like where topic_id = t.id) like_number, 
+		(select count(1) from bbs_reply where topic_id = t.id) reply_number from bbs_topic t 
+		left join base_member u on t.member_id = u.id
+		left join bbs_category c on c.id = t.category_id
+		<where>
+			<if test="userId != null">
+				member_id = #{userId}
+			</if>
+			<if test="categoryId != null and categoryId != -1">
+				and category_id = #{categoryId}
+			</if>
+			<if test="title != null and title.trim() != ''">
+				and `title` like concat('%',#{title},'%') 
+			</if>
+		</where>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from bbs_topic 
+		<where>
+			<if test="userId != null">
+				member_id = #{userId}
+			</if>
+			<if test="categoryId != null and categoryId != -1">
+				and category_id = #{categoryId}
+			</if>
+			<if test="title != null and title.trim() != ''">
+				and `title` like concat('%',#{title},'%') 
+			</if>
+		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.wfuhui.modules.bbs.entity.TopicEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into bbs_topic
+		(
+			`title`, 
+			`member_id`, 
+			`status`, 
+			`category_id`, 
+			`content`, 
+			`video_url`, 
+			`anonymous`, 
+			`create_time`
+		)
+		values
+		(
+			#{title}, 
+			#{memberId}, 
+			#{status}, 
+			#{categoryId}, 
+			#{content}, 
+			#{videoUrl}, 
+			#{anonymous}, 
+			#{createTime}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.wfuhui.modules.bbs.entity.TopicEntity">
+		update bbs_topic 
+		<set>
+			<if test="title != null">`title` = #{title}, </if>
+			<if test="memberId != null">`member_id` = #{memberId}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from bbs_topic where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from bbs_topic where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+	<select id="queryTopicCount" resultType="java.util.Map">
+		SELECT
+		date_format(create_time,'%Y-%m-%d') as createTime, count(1) count
+		FROM
+		bbs_topic t1
+		GROUP BY date_format(create_time,'%Y-%m-%d')
+	</select>
+
+</mapper>

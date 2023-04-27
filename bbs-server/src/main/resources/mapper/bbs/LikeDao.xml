@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wfuhui.modules.bbs.dao.LikeDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.wfuhui.modules.bbs.entity.LikeEntity" id="likeMap">
+        <result property="id" column="id"/>
+        <result property="memberId" column="member_id"/>
+        <result property="topicId" column="topic_id"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="com.wfuhui.modules.bbs.entity.LikeEntity">
+		select * from bbs_like where id = #{value}
+	</select>
+	
+	<select id="queryLike" resultType="com.wfuhui.modules.bbs.entity.TopicEntity">
+		select t.* from bbs_topic t left join bbs_like l on t.id = l.topic_id where l.member_id = #{value}
+	</select>
+
+	<select id="queryList" resultType="com.wfuhui.modules.bbs.entity.LikeEntity">
+		select * from bbs_like
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from bbs_like 
+		<where>
+			<if test="userId != null">
+				and member_id = #{userId}
+			</if>
+			<if test="topicId != null">
+				and topic_id = #{topicId}
+			</if>
+		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.wfuhui.modules.bbs.entity.LikeEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into bbs_like
+		(
+			`member_id`, 
+			`topic_id`, 
+			`create_time`
+		)
+		values
+		(
+			#{memberId}, 
+			#{topicId}, 
+			#{createTime}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.wfuhui.modules.bbs.entity.LikeEntity">
+		update bbs_like 
+		<set>
+			<if test="memberId != null">`member_id` = #{memberId}, </if>
+			<if test="topicId != null">`topic_id` = #{topicId}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from bbs_like where id = #{value}
+	</delete>
+	
+	<delete id="remove">
+		delete from bbs_like where topic_id = #{topicId} and member_id = #{userId}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from bbs_like where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

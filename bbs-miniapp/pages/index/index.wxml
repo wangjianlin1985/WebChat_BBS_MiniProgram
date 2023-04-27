@@ -1,0 +1,57 @@
+<!--pages/topic/index.wxml-->
+<view class="container">
+  <view class="weui-search-bar">
+    <view class="weui-search-bar__form">
+      <view class="weui-search-bar__box">
+        <icon class="weui-icon-search_in-box" type="search" size="14"></icon>
+        <input type="text" class="weui-search-bar__input" placeholder="搜索" value="{{inputVal}}" focus="{{inputShowed}}" bindinput="inputTyping" />
+        <view class="weui-icon-clear" wx:if="{{inputVal.length > 0}}" bindtap="clearInput">
+          <icon type="clear" size="14"></icon>
+        </view>
+      </view>
+      <label class="weui-search-bar__label" hidden="{{inputShowed}}" bindtap="showInput">
+        <icon class="weui-icon-search" type="search" size="14"></icon>
+        <view class="weui-search-bar__text">搜索</view>
+      </label>
+    </view>
+    <view class="weui-search-bar__cancel-btn" hidden="{{!inputShowed}}" bindtap="hideInput">取消</view>
+  </view>
+  <scroll-view scroll-x="true">
+  <view class="weui-flex navbar" style="width: {{navWidth}}rpx">
+    <block wx:for="{{tabs}}" wx:key="*this">
+      <view id="{{index}}" class="item {{activeIndex == index ? 'item_on' : ''}}" bindtap="tabClick">
+        <view class="title">{{item}}</view>
+      </view>
+    </block>
+  </view>
+</scroll-view>
+  <view class="content">
+    <view class='news-box' wx:for="{{topicList}}" wx:key="index">
+      <view class='weui-flex user-info' data-id="{{item.id}}" bindtap="toDetail">
+        <image wx:if="{{!item.anonymous}}" src='{{item.member.avatarUrl}}'></image>
+        <image wx:if="{{item.anonymous}}" src='/images/avatar.png'></image>
+        <view class="info">
+          <view class='nick-name' wx:if="{{!item.anonymous}}">{{item.member.nickname}}</view>
+          <view class='nick-name' wx:if="{{item.anonymous}}">匿名</view>
+          <view class='create-time'>{{item.createTime}}</view>
+        </view>
+      </view>
+      <view class="news-summary" data-id="{{item.id}}" bindtap="toDetail">
+        <image class="topic-pic" src="{{item}}" wx:for="{{item.picUrls}}" wx:key="index"></image>
+      </view>
+      <view>
+        <video style="width: 100%" src="{{item.videoUrl}}" wx:if="{{item.videoUrl}}" object-fit="fill"></video>
+      </view>
+      <view class="news-title" data-id="{{item.id}}" bindtap="toDetail">
+        {{item.title}}
+      </view>
+      <view class='news-date' data-id="{{item.id}}" bindtap="toDetail">
+        <view class="news-liked">{{item.createTime}}</view>
+        <view class="news-liked">
+          <text>{{item.likeNumber}}点赞    {{item.replyNumber}}评论</text>
+        </view>
+      </view>
+    </view>
+  </view>
+  <!--<image class="add" src="/images/add.png" bindtap="addTopic" hidden="true"></image>-->
+</view>

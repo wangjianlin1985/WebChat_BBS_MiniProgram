@@ -1,0 +1,23 @@
+<!--pages/reply-list/index.wxml-->
+<view class='container'>
+  <view class='title'>全部评论({{total}})</view>
+
+  <view class='list-item' wx:for="{{replyList}}" wx:key="index">
+    <view class='weui-flex user-info'>
+      <image src='{{item.memberInfo.avatarUrl}}'></image>
+      <view class="info">
+        <view class='nick-name'>{{item.user.nickName}}</view>
+        <view class='create-time'>{{item.createTime}}</view>
+      </view>
+    </view>
+    <view class='content'>
+      {{item.content}}
+    </view>
+  </view>
+
+  <view class="footer-box">
+    <view class='reply' bindtap='reply'>
+      请输入评论...
+    </view>
+  </view>
+</view>

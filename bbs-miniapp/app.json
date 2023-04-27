@@ -1,0 +1,51 @@
+{
+  "pages":[
+    "pages/index/index",
+    "pages/login/index",
+    "pages/register/index",
+    "pages/bbs/topic-add/index",
+    "pages/bbs/topic-detail/index",
+    "pages/bbs/topic-list/index",
+    "pages/bbs/my-topic/index",
+    "pages/bbs/my-comment/index",
+    "pages/bbs/collect/index",
+    "pages/bbs/like/index",
+    "pages/bbs/comment/index",
+    "pages/bbs/comment-list/index",
+    "pages/my/index/index"
+  ],
+  "window":{
+    "backgroundTextStyle":"light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "论坛",
+    "navigationBarTextStyle":"black"
+  },
+  "tabBar": {
+    "color": "#6e6d6b",
+    "selectedColor": "#e64340",
+    "borderStyle": "black",
+    "backgroundColor": "#ffffff",
+    "box-shadow": "0 0 6px 0",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "iconPath": "images/nav/home-off.png",
+        "selectedIconPath": "images/nav/home-on.png",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/bbs/topic-add/index",
+        "iconPath": "images/nav/publish-off.png",
+        "selectedIconPath": "images/nav/publish-on.png",
+        "text": "发布"
+      },
+      {
+        "pagePath": "pages/my/index/index",
+        "iconPath": "images/nav/personal-off.png",
+        "selectedIconPath": "images/nav/personal-on.png",
+        "text": "我的"
+      }
+    ]
+  },
+  "sitemapLocation": "sitemap.json"
+}

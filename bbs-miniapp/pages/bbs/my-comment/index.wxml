@@ -1,0 +1,16 @@
+<!--pages/topic/index.wxml-->
+<view class="container">
+  <block wx:for="{{replyList}}" wx:key="index">
+    <view class='news-box'>
+      
+      <view class="news-title">
+        {{item.content}}
+      </view>
+      <view class='weui-flex news-date'>
+        <view class="weui-flex__item news-liked">{{item.createTime}}</view>
+        <button bindtap="del" size="mini" data-id="{{item.id}}" type="warn">删除</button>
+      </view>
+    </view>
+
+  </block>
+</view>

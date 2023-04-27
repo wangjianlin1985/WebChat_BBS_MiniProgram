@@ -1,0 +1,51 @@
+<!--pages/topic/index.wxml-->
+<view class="container">
+  <view class="weui-search-bar">
+    <view class="weui-search-bar__form">
+      <view class="weui-search-bar__box">
+        <icon class="weui-icon-search_in-box" type="search" size="14"></icon>
+        <input type="text" class="weui-search-bar__input" placeholder="搜索" value="{{inputVal}}" focus="{{inputShowed}}" bindinput="inputTyping" confirm-type="search" bindconfirm="getTopic"/>
+        <view class="weui-icon-clear" wx:if="{{inputVal.length > 0}}" bindtap="clearInput">
+          <icon type="clear" size="14"></icon>
+        </view>
+      </view>
+      <label class="weui-search-bar__label" hidden="{{inputShowed}}" bindtap="showInput">
+        <icon class="weui-icon-search" type="search" size="14"></icon>
+        <view class="weui-search-bar__text">搜索</view>
+      </label>
+    </view>
+    <view class="weui-search-bar__cancel-btn" hidden="{{!inputShowed}}" bindtap="hideInput">取消</view>
+  </view>
+  <view class="weui-navbar" hidden="true">
+    <block wx:for="{{tabs}}" wx:key="*this">
+      <view id="{{index}}" class="weui-navbar__item {{activeIndex == index ? 'weui-bar__item_on' : ''}}" bindtap="tabClick">
+        <view class="weui-navbar__title">{{item}}</view>
+      </view>
+    </block>
+    <view class="weui-navbar__slider" style="left: {{sliderLeft}}px; transform: translateX({{sliderOffset}}px); -webkit-transform: translateX({{sliderOffset}}px);"></view>
+  </view>
+  <view class="content">
+    <navigator class='news-box' url="/pages/bbs/topic-detail/index?id={{item.id}}" wx:for="{{topicList}}" wx:key="index">
+      <view class='weui-flex user-info'>
+        <image src='{{item.member.avatarUrl}}'></image>
+        <view class="info">
+          <view class='nick-name'>{{item.member.nickname}}</view>
+          <view class='create-time'>{{item.createTime}}</view>
+        </view>
+      </view>
+      <view class="news-summary">
+        <image class="topic-pic" src="{{item}}" wx:for="{{item.picUrls}}"></image>
+      </view>
+      <view class="news-title">
+        {{item.title}}
+      </view>
+      <view class='news-date'>
+        <view class="news-liked">{{item.createTime}}</view>
+        <view class="news-liked">
+          <text>{{item.likeNumber}}点赞    {{item.replyNumber}}评论</text>
+        </view>
+      </view>
+    </navigator>
+  </view>
+  <!--<image class="add" src="/images/add.png" bindtap="addTopic" hidden="true"></image>-->
+</view>

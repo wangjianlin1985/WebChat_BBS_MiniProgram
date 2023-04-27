@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wfuhui.modules.bbs.dao.FollowDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.wfuhui.modules.bbs.entity.FollowEntity" id="followMap">
+        <result property="id" column="id"/>
+        <result property="memberId" column="member_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="createTime" column="create_time"/>
+        <association property="member" javaType="com.wfuhui.modules.member.entity.MemberEntity">
+        	<result property="nickname" column="nickname"/>
+        	<result property="avatarUrl" column="avatar_url"/>
+        </association>
+    </resultMap>
+
+	<select id="queryObject" resultType="com.wfuhui.modules.bbs.entity.FollowEntity">
+		select * from bbs_follow where id = #{value}
+	</select>
+
+	<select id="queryList" resultMap="followMap">
+		select f.*,u.nickname, u.avatar_url from bbs_follow f left join base_member u on f.user_id = u.id
+		<where>
+			<if test="memberId != null">
+				and f.member_id = #{memberId}
+			</if>
+		</where>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from bbs_follow 
+		<where>
+			<if test="userId != null">
+				and user_id = #{userId}
+			</if>
+			<if test="memberId != null">
+				and member_id = #{memberId}
+			</if>
+		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.wfuhui.modules.bbs.entity.FollowEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into bbs_follow
+		(
+			`member_id`, 
+			`user_id`, 
+			`create_time`
+		)
+		values
+		(
+			#{memberId}, 
+			#{userId}, 
+			#{createTime}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.wfuhui.modules.bbs.entity.FollowEntity">
+		update bbs_follow 
+		<set>
+			<if test="memberId != null">`member_id` = #{memberId}, </if>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from bbs_follow where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from bbs_follow where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+	
+	<delete id="remove">
+		delete from bbs_follow where user_id = #{userId} and member_id = #{userId}
+	</delete>
+
+</mapper>

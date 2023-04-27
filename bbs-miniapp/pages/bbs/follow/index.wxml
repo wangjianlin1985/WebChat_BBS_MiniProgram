@@ -1,0 +1,11 @@
+<!--pages/topic/index.wxml-->
+<view class="container">
+  <view wx:for="{{followList}}" wx:key="index">
+      <view class='weui-flex user-info'>
+        <image src='{{item.member.avatarUrl}}'></image>
+        <view class="info">
+          <view class='nick-name'>{{item.member.nickname}}</view>
+        </view>
+      </view>
+  </view>
+</view>

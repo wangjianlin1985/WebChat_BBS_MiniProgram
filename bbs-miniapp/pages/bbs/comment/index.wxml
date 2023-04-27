@@ -1,0 +1,27 @@
+<!--pages/comment/index.wxml-->
+<view class="container">
+  <form bindsubmit='submitComment'>
+    <view class="weui-cells weui-cells_after-title">
+      <view class="weui-cell">
+        <view class="weui-cell__bd">
+          <textarea name="comment" class="weui-textarea" placeholder="请输入您的评论" style="height: 5.3em" />
+        </view>
+      </view>
+      <view class="weui-cell weui-cell_check">
+        <view class="weui-cell__hd">
+          <view class="weui-label">匿名</view>
+        </view>
+        <view class="weui-cell__bd">
+          <radio-group bindchange="anonymousChange" name="anonymous">
+            <radio value="0" checked="{{anonymous == 0}}">否</radio>
+            <radio value="1" checked="{{anonymous == 1}}">是</radio>
+          </radio-group>
+        </view>
+      </view>
+    </view>
+      <view class="weui-btn-area">
+        <button form-type='submit' type="primary">提交</button>
+      </view>
+    
+  </form>
+</view>

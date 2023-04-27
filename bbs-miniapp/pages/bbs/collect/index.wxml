@@ -1,0 +1,12 @@
+<!--pages/topic/index.wxml-->
+<view class="container">
+  <block wx:for="{{collectList}}" wx:key="index">
+    <navigator class='news-box' url="/pages/bbs/topic-detail/index?id={{item.topic.id}}">
+      
+      <view class="news-title">
+        {{item.topic.title}}
+      </view>
+      
+    </navigator>
+  </block>
+</view>

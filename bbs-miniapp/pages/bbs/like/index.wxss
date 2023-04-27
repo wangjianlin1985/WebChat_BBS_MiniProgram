@@ -1,0 +1,67 @@
+/* pages/topic/index.wxss */
+.add{
+  width: 100rpx;
+  height: 100rpx;
+  position: fixed;
+  bottom: 60rpx;
+  right: 60rpx;
+}
+
+.user-info {
+  margin-bottom: 20rpx;
+  align-items: center;
+}
+
+.user-info .info{
+  margin-left: 10rpx;
+}
+
+.user-info .nick-name {
+  font-size: 32rpx;
+}
+
+.create-time {
+  font-size: 28rpx;
+  color: #999;
+}
+
+.user-info image {
+  width: 90rpx;
+  height: 90rpx;
+  border-radius: 50%;
+}
+
+.news {
+  background: #fff;
+}
+
+.news-container {
+  padding: 5rpx;
+}
+
+.news-title {
+  font-size: 34rpx;
+  margin-bottom: 15rpx;
+}
+
+.news-summary {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.news-liked {
+  font-size: 24rpx;
+  text-align: right;
+  color: #999;
+}
+
+.news-box {
+  padding: 20rpx;
+  background: #fff;
+  border-bottom: 1rpx solid #ddd;
+}
+
+.topic-pic{
+  width: 220rpx;
+  height: 220rpx;
+}

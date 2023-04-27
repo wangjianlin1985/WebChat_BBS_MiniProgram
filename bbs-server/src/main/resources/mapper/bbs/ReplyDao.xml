@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wfuhui.modules.bbs.dao.ReplyDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.wfuhui.modules.bbs.entity.ReplyEntity" id="replyMap">
+        <result property="id" column="id"/>
+        <result property="content" column="content"/>
+        <result property="memberId" column="member_id"/>
+        <result property="topicId" column="topic_id"/>
+        <result property="anonymous" column="anonymous"/>
+        <result property="createTime" column="create_time"/>
+        <association property="member" javaType="com.wfuhui.modules.member.entity.MemberEntity">
+        	<result property="nickname" column="nickname"/>
+        	<result property="avatarUrl" column="avatar_url"/>
+        </association>
+        <association property="topic" javaType="com.wfuhui.modules.bbs.entity.TopicEntity">
+        	<result property="title" column="title"/>
+        </association>
+    </resultMap>
+
+	<select id="queryObject" resultType="com.wfuhui.modules.bbs.entity.ReplyEntity">
+		select * from bbs_reply where id = #{value}
+	</select>
+
+	<select id="queryList" resultMap="replyMap">
+		select t.*, u.nickname, u.avatar_url, bt.title from bbs_reply t left join base_member u on t.member_id = u.id
+		left join bbs_topic bt on bt.id = t.topic_id
+		<where>
+			<if test="topicId != null">
+				topic_id = #{topicId}
+			</if>
+			<if test="memberId != null">
+				and t.member_id = #{memberId}
+			</if>
+			<if test="content != null and content.trim() != ''">
+				and `content` like concat('%',#{content},'%') 
+			</if>
+		</where>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by t.id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from bbs_reply 
+		<where>
+			<if test="topicId != null">
+				topic_id = #{topicId}
+			</if>
+			<if test="memberId != null">
+				and member_id = #{memberId}
+			</if>
+			<if test="content != null and content.trim() != ''">
+				and `content` like concat('%',#{content},'%') 
+			</if>
+		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.wfuhui.modules.bbs.entity.ReplyEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into bbs_reply
+		(
+			`content`, 
+			`member_id`, 
+			`topic_id`, 
+			`anonymous`, 
+			`create_time`
+		)
+		values
+		(
+			#{content}, 
+			#{memberId}, 
+			#{topicId}, 
+			#{anonymous}, 
+			#{createTime}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.wfuhui.modules.bbs.entity.ReplyEntity">
+		update bbs_reply 
+		<set>
+			<if test="content != null">`content` = #{content}, </if>
+			<if test="memberId != null">`member_id` = #{memberId}, </if>
+			<if test="topicId != null">`topic_id` = #{topicId}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from bbs_reply where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from bbs_reply where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>
